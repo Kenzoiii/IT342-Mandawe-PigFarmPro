@@ -41,7 +41,7 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         // Hide password
-        user.setPassword(null);
+        user.setPasswordHash(null);
         return ResponseEntity.ok(user);
     }
 

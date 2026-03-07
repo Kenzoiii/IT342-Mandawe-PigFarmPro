@@ -1,6 +1,8 @@
 package com.it342.g3.backend.service;
 
 import com.it342.g3.backend.model.User;
+import com.it342.g3.backend.dto.RegisterRequest;
+import com.it342.g3.backend.dto.AuthResponse;
 import com.it342.g3.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,16 +22,49 @@ public class AuthService {
     @Autowired
     private TokenProvider tokenProvider;
 
-    public User registerUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        if(user.getRole() == null) user.setRole("USER");
-        return userRepository.save(user);
+    /**
+     * Register a new user with full validation per SDD
+     */
+    public AuthResponse registerUser(RegisterRequest registerRequest) {
+        // Create user entity from register request
+        User user = new User();
+        user.setUsername(registerRequest.getUsername());
+        user.setEmail(registerRequest.getEmail());
+        user.setPasswordHash(passwordEncoder.encode(registerRequest.getPassword()));
+        user.setFullName(registerRequest.getFullName());
+        user.setRole("USER"); // Default role
+
+        // Save user to database
+        User savedUser = userRepository.save(user);
+
+        // Generate token
+        String token = tokenProvider.generateToken(savedUser);
+
+        // Return auth response
+        return new AuthResponse(
+            savedUser.getId(),
+            savedUser.getUsername(),
+            savedUser.getEmail(),
+            savedUser.getFullName(),
+            token
+        );
     }
 
-    public User authenticateUser(String email, String rawPassword) {
+    /**
+     * Authenticate user and return token
+     */
+    public AuthResponse authenticateUser(String email, String rawPassword) {
         User user = userRepository.findByEmail(email).orElse(null);
-        if(user != null && passwordEncoder.matches(rawPassword, user.getPassword())) {
-            return user;
+
+        if (user != null && passwordEncoder.matches(rawPassword, user.getPasswordHash())) {
+            String token = tokenProvider.generateToken(user);
+            return new AuthResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFullName(),
+                token
+            );
         }
         return null;
     }

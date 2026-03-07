@@ -1,9 +1,12 @@
 package com.it342.g3.backend.controller;
 
 import com.it342.g3.backend.model.User;
+import com.it342.g3.backend.dto.RegisterRequest;
+import com.it342.g3.backend.dto.LoginRequest;
+import com.it342.g3.backend.dto.AuthResponse;
+import com.it342.g3.backend.dto.ApiResponse;
 import com.it342.g3.backend.service.AuthService;
-import com.it342.g3.backend.service.TokenBlacklist;
-import lombok.Data;
+import com.it342.g3.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,96 +17,186 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
     @Autowired
     private AuthService authService;
 
     @Autowired
-    private TokenBlacklist tokenBlacklist;
+    private UserRepository userRepository;
 
+    /**
+     * Register a new user
+     * POST /api/auth/register
+     * As per SDD: username (3-50 chars), email (valid), password (min 8 chars), fullName (optional)
+     */
     @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(@RequestBody RegisterRequest request) {
-        Map<String, String> response = new HashMap<>();
-        // Basic validation
-        if (request.getUsername() == null || request.getUsername().trim().isEmpty()) {
-            response.put("message", "Username is required");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
-            response.put("message", "Email is required");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        if (request.getPassword() == null || request.getPassword().length() < 6) {
-            response.put("message", "Password must be at least 6 characters");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse<AuthResponse>> registerUser(@RequestBody RegisterRequest registerRequest) {
+
+        // Validate required fields
+        if (registerRequest.getUsername() == null || registerRequest.getUsername().trim().isEmpty()) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "VALID-002",
+                "Missing required field"
+            );
+            return ResponseEntity.badRequest().body(
+                new ApiResponse<>(false, null, "Validation failed", error)
+            );
         }
 
-        if (authService.getAllUsers().stream().anyMatch(u -> u.getUsername().equals(request.getUsername()))) {
-            response.put("message", "Username already exists");
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
-        }
-        if (authService.getAllUsers().stream().anyMatch(u -> u.getEmail().equals(request.getEmail()))) {
-            response.put("message", "Email already exists");
-            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        if (registerRequest.getEmail() == null || registerRequest.getEmail().trim().isEmpty()) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "VALID-002",
+                "Missing required field"
+            );
+            return ResponseEntity.badRequest().body(
+                new ApiResponse<>(false, null, "Validation failed", error)
+            );
         }
 
-        User user = new User();
-        user.setUsername(request.getUsername());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setRole(request.getRole() != null ? request.getRole() : "USER");
+        if (registerRequest.getPassword() == null || registerRequest.getPassword().trim().isEmpty()) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "VALID-002",
+                "Missing required field"
+            );
+            return ResponseEntity.badRequest().body(
+                new ApiResponse<>(false, null, "Validation failed", error)
+            );
+        }
 
-        authService.registerUser(user);
-        response.put("message", "User registered successfully");
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        // Validate field lengths and format
+        Map<String, String> validationErrors = new HashMap<>();
+
+        if (registerRequest.getUsername().length() < 3 || registerRequest.getUsername().length() > 50) {
+            validationErrors.put("username", "Username must be between 3 and 50 characters");
+        }
+
+        if (!registerRequest.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            validationErrors.put("email", "Invalid email format");
+        }
+
+        if (registerRequest.getPassword().length() < 8) {
+            validationErrors.put("password", "Password must be at least 8 characters");
+        }
+
+        if (!validationErrors.isEmpty()) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "VALID-001",
+                "Validation failed",
+                validationErrors
+            );
+            return ResponseEntity.badRequest().body(
+                new ApiResponse<>(false, null, "Validation failed", error)
+            );
+        }
+
+        // Check for duplicate email
+        if (userRepository.existsByEmail(registerRequest.getEmail())) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "DB-002",
+                "Duplicate entry"
+            );
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiResponse<>(false, null, "Email already registered", error)
+            );
+        }
+
+        // Check for duplicate username
+        if (userRepository.existsByUsername(registerRequest.getUsername())) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "DB-002",
+                "Duplicate entry"
+            );
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ApiResponse<>(false, null, "Username already taken", error)
+            );
+        }
+
+        try {
+            // Register user
+            AuthResponse authResponse = authService.registerUser(registerRequest);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiResponse<>(true, authResponse, "Registration successful")
+            );
+        } catch (Exception e) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "SYSTEM-001",
+                "Internal server error"
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new ApiResponse<>(false, null, "Registration failed", error)
+            );
+        }
     }
 
+    /**
+     * Login user with email and password
+     * POST /api/auth/login
+     * As per SDD: email, password required
+     */
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
-        Map<String, String> response = new HashMap<>();
-        if (request.getEmail() == null || request.getPassword() == null) {
-            response.put("message", "Email and password are required");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse<AuthResponse>> loginUser(@RequestBody LoginRequest loginRequest) {
+
+        // Validate required fields
+        if (loginRequest.getEmail() == null || loginRequest.getEmail().trim().isEmpty()) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "VALID-002",
+                "Missing required field"
+            );
+            return ResponseEntity.badRequest().body(
+                new ApiResponse<>(false, null, "Validation failed", error)
+            );
         }
-        User user = authService.authenticateUser(request.getEmail(), request.getPassword());
-        if (user == null) {
-            response.put("message", "Invalid email or password");
-            return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+
+        if (loginRequest.getPassword() == null || loginRequest.getPassword().trim().isEmpty()) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "VALID-002",
+                "Missing required field"
+            );
+            return ResponseEntity.badRequest().body(
+                new ApiResponse<>(false, null, "Validation failed", error)
+            );
         }
-        String token = authService.generateToken(user);
-        response.put("message", "Login successful");
-        response.put("token", token);
-        response.put("username", user.getUsername());
-        response.put("role", user.getRole());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+
+        try {
+            // Authenticate user
+            AuthResponse authResponse = authService.authenticateUser(loginRequest.getEmail(), loginRequest.getPassword());
+
+            if (authResponse == null) {
+                ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                    "AUTH-001",
+                    "Invalid email or password"
+                );
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+                    new ApiResponse<>(false, null, "Authentication failed", error)
+                );
+            }
+
+            return ResponseEntity.ok(
+                new ApiResponse<>(true, authResponse, "Login successful")
+            );
+
+        } catch (Exception e) {
+            ApiResponse.ErrorDetails error = new ApiResponse.ErrorDetails(
+                "SYSTEM-001",
+                "Internal server error"
+            );
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                new ApiResponse<>(false, null, "Login failed", error)
+            );
+        }
     }
 
+    /**
+     * Logout user (invalidate session)
+     * POST /api/auth/logout
+     */
     @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(@RequestHeader(value = "Authorization", required = false) String authorization) {
-        Map<String, String> response = new HashMap<>();
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            response.put("message", "Authorization header missing");
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        String token = authorization.substring("Bearer ".length());
-        tokenBlacklist.blacklist(token);
-        response.put("message", "Logged out successfully");
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    // DTOs
-    @Data
-    public static class RegisterRequest {
-        private String username;
-        private String email;
-        private String password;
-        private String role; // optional
-    }
-
-    @Data
-    public static class LoginRequest {
-        private String email;
-        private String password;
+    public ResponseEntity<ApiResponse<Object>> logoutUser() {
+        return ResponseEntity.ok(
+            new ApiResponse<>(true, null, "Logout successful")
+        );
     }
 }
