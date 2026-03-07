@@ -1,41 +1,80 @@
-# User Registration and Authentication System
+# PigFarmPro - Pig Farm Management System
 
-This project implements a user registration and authentication system with a Spring Boot backend and a ReactJS web application.
+**IT342 Phase 1 - User Registration and Authentication**
+
+PigFarmPro is a comprehensive pig farm management system designed to help farmers track pigs, pens, feeding schedules, health records, sales, and mortality data. This Phase 1 implementation focuses on user registration and authentication functionality.
 
 ## Technologies Used
-- Java (Spring Boot)
-- MySQL
-- ReactJS
-- BCrypt
-- Git & GitHub
+- **Backend**: Spring Boot 3.4.1, Spring Security, Spring Data JPA
+- **Database**: PostgreSQL (Supabase Cloud)
+- **Frontend**: React + Vite
+- **Security**: BCrypt password hashing, JWT authentication
+- **Build Tool**: Maven
+- **Version Control**: Git & GitHub
 
 ## Project Structure
-- /backend - Spring Boot backend
-- /web - ReactJS web application
-- /mobile - Android Kotlin mobile application
-- /docs - Documentation (FRS, diagrams, screenshots)
+- `/backend` - Spring Boot REST API (Maven project: edu.cit.mandawe:pigfarmpro)
+- `/web` - React + Vite web application
+- `/mobile` - Android Kotlin mobile application (future implementation)
+- `/docs` - Documentation (FRS, diagrams, screenshots)
 
-## API Endpoints
-- POST /api/auth/register
-- POST /api/auth/login
-- POST /api/auth/logout (requires Authorization header)
-- GET /api/user/me (protected; requires Authorization header)
+## Database Schema (Phase 1)
+**Users Table:**
+- id (Primary Key)
+- username (Unique)
+- email (Unique)
+- password_hash (BCrypt)
+- full_name
+- role (default: "USER")
+- created_at
+
+**Additional Tables (ERD Complete):**
+- pens, pigs, feedings, health_records, sales, mortality_records
+
+## API Endpoints (Phase 1)
+**Authentication:**
+- `POST /api/auth/register` - Register new user (returns 201 Created)
+- `POST /api/auth/login` - Login user (returns 200 OK with JWT token)
+- `POST /api/auth/logout` - Logout user (returns 200 OK)
+
+**Response Format:**
+```json
+{
+  "success": true,
+  "data": { ... },
+  "message": "Operation successful",
+  "timestamp": "2026-03-07T10:30:00.000Z"
+}
+```
 
 ## How to Run Backend
-1. Ensure MySQL is running and create database `it342_g3_mandawe`.
-2. Update `backend/src/main/resources/application.properties` with your MySQL username/password.
-3. From the repo root:
+**Prerequisites:**
+- Java 17 or higher
+- Maven 3.6+
+
+**Steps:**
+1. The project is configured to use Supabase PostgreSQL (cloud database)
+2. From the repo root:
 
 ```powershell
 cd backend
-./mvnw.cmd spring-boot:run
+mvnw.cmd spring-boot:run
 ```
 
 Backend runs on `http://localhost:8081`.
 
+**Database Connection:**
+- Host: db.vtgcxynqvkrlfztdpsga.supabase.co
+- Port: 5432
+- Database: postgres
+- All credentials are in `application.properties`
+
 ## How to Run Web App
-1. Install Node.js (LTS).
-2. From the repo root:
+**Prerequisites:**
+- Node.js (LTS version)
+
+**Steps:**
+1. From the repo root:
 
 ```powershell
 cd web
@@ -43,14 +82,45 @@ npm install
 npm run dev
 ```
 
-Open the printed local URL (typically `http://localhost:5173`).
+2. Open `http://localhost:5173` in your browser
 
-## How to Run Mobile App
-Android Kotlin app is under `/mobile`.
+**Features:**
+- User Registration (username, email, password, full name)
+- User Login (email, password)
+- Dashboard (displays user info after login)
+- Input validation and duplicate prevention
 
-Recommended: open the `/mobile` folder in Android Studio (latest), let it import the Gradle project, then run on an emulator.
+## Phase 1 Implementation Details
+**User Registration:**
+- Fields: username, email, password, full name
+- Validation: username (3-50 chars), email format, password (8+ chars)
+- Duplicate Prevention: Returns 409 Conflict if email/username exists
+- Password Security: BCrypt hashing with 10 salt rounds
 
-Notes:
-- Backend base URL on Android emulator is `http://10.0.2.2:8081`.
-- Activities included: Login, Register, Dashboard (protected), and Logout.
-- Logout calls `/api/auth/logout` and clears local token.
+**User Login:**
+- Credentials: email and password
+- Verification: BCrypt password matching against stored hash
+- Post-login: JWT token generation, redirect to dashboard
+
+**Security Features:**
+- BCrypt password hashing (never stores plain text)
+- JWT token-based authentication
+- CORS configuration for localhost development
+- Input validation on both frontend and backend
+
+## Maven Coordinates
+```xml
+<groupId>edu.cit.mandawe</groupId>
+<artifactId>pigfarmpro</artifactId>
+<version>1.0.0</version>
+```
+
+## Git Commit (Phase 1)
+**Commit Message:** "IT342 Phase 1 – User Registration and Login Completed"  
+**Commit Hash:** 98c4364a44f58d805577182a3c482234266af3c7
+
+## Future Phases
+- Phase 2: Pen and Pig Management
+- Phase 3: Feeding and Health Records
+- Phase 4: Sales and Mortality Tracking
+- Phase 5: Mobile Application Integration
