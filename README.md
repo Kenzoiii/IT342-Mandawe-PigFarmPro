@@ -18,18 +18,6 @@ PigFarmPro is a comprehensive pig farm management system designed to help farmer
 - `/mobile` - Android Kotlin mobile application (future implementation)
 - `/docs` - Documentation (FRS, diagrams, screenshots)
 
-## Database Schema (Phase 1)
-**Users Table:**
-- id (Primary Key)
-- username (Unique)
-- email (Unique)
-- password_hash (BCrypt)
-- full_name
-- role (default: "USER")
-- created_at
-
-**Additional Tables (ERD Complete):**
-- pens, pigs, feedings, health_records, sales, mortality_records
 
 ## API Endpoints (Phase 1)
 **Authentication:**
@@ -84,30 +72,6 @@ npm run dev
 
 2. Open `http://localhost:5173` in your browser
 
-**Features:**
-- User Registration (username, email, password, full name)
-- User Login (email, password)
-- Dashboard (displays user info after login)
-- Input validation and duplicate prevention
-
-## Phase 1 Implementation Details
-**User Registration:**
-- Fields: username, email, password, full name
-- Validation: username (3-50 chars), email format, password (8+ chars)
-- Duplicate Prevention: Returns 409 Conflict if email/username exists
-- Password Security: BCrypt hashing with 10 salt rounds
-
-**User Login:**
-- Credentials: email and password
-- Verification: BCrypt password matching against stored hash
-- Post-login: JWT token generation, redirect to dashboard
-
-**Security Features:**
-- BCrypt password hashing (never stores plain text)
-- JWT token-based authentication
-- CORS configuration for localhost development
-- Input validation on both frontend and backend
-
 ## Maven Coordinates
 ```xml
 <groupId>edu.cit.mandawe</groupId>
@@ -115,12 +79,3 @@ npm run dev
 <version>1.0.0</version>
 ```
 
-## Git Commit (Phase 1)
-**Commit Message:** "IT342 Phase 1 – User Registration and Login Completed"  
-**Commit Hash:** 98c4364a44f58d805577182a3c482234266af3c7
-
-## Future Phases
-- Phase 2: Pen and Pig Management
-- Phase 3: Feeding and Health Records
-- Phase 4: Sales and Mortality Tracking
-- Phase 5: Mobile Application Integration
