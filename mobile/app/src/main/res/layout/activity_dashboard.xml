@@ -6,6 +6,21 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dashboard"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/textGreeting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
         android:id="@+id/message"
         android:textColor="#B00020"
         android:layout_width="match_parent"

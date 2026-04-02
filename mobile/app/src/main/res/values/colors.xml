@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="auth_bg_top">#EAF2F4</color>
+    <color name="auth_bg_mid">#E3EDF0</color>
+    <color name="auth_bg_bottom">#DCE8EC</color>
+
+    <color name="auth_card_bg">#FDFDFD</color>
+    <color name="auth_card_stroke">#D4E1E5</color>
+    <color name="auth_input_bg">#FFFFFF</color>
+    <color name="auth_input_stroke">#BCCAD0</color>
+    <color name="auth_input_hint">#7E8D97</color>
+
+    <color name="auth_title">#0B2146</color>
+    <color name="auth_body">#315267</color>
+    <color name="auth_label">#13294B</color>
+    <color name="auth_error">#B00020</color>
+
+    <color name="auth_button">#069B79</color>
+    <color name="auth_button_pressed">#03765D</color>
+    <color name="auth_button_disabled">#8FB9B0</color>
+    <color name="auth_link">#008E73</color>
+    <color name="auth_white">#FFFFFF</color>
+
+    <color name="logo_bg">#069B79</color>
+    <color name="banner_bg">#F4FAFB</color>
+    <color name="banner_stroke">#9EB6BF</color>
+    <color name="banner_mark">#CCDFE5</color>
+</resources>

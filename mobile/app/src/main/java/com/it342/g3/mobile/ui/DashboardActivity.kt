@@ -23,9 +23,12 @@ class DashboardActivity : AppCompatActivity() {
         val role = findViewById<TextView>(R.id.textRole)
         val message = findViewById<TextView>(R.id.message)
         val logoutBtn = findViewById<Button>(R.id.btnLogout)
+        val greeting = findViewById<TextView>(R.id.textGreeting)
 
         val prefs = getSharedPreferences("auth", MODE_PRIVATE)
         val token = prefs.getString("token", "") ?: ""
+        val savedName = prefs.getString("fullName", "") ?: ""
+        val savedUsername = prefs.getString("username", "") ?: ""
         if (token.isEmpty()) {
             message.text = "Not logged in"
             startActivity(Intent(this, LoginActivity::class.java))
@@ -33,18 +36,34 @@ class DashboardActivity : AppCompatActivity() {
             return
         }
 
+        greeting.text = if (savedName.isNotBlank()) {
+            "Welcome, $savedName"
+        } else {
+            "Welcome, $savedUsername"
+        }
+
         ApiClient.service.me("Bearer $token").enqueue(object : Callback<UserProfile> {
             override fun onResponse(call: Call<UserProfile>, response: Response<UserProfile>) {
                 val body = response.body()
                 if (response.isSuccessful && body != null) {
-                    username.text = body.username
-                    email.text = body.email
-                    role.text = body.role
+                    username.text = "Username: ${body.username ?: savedUsername}"
+                    email.text = "Email: ${body.email ?: prefs.getString("email", "")}" 
+                    role.text = "Role: ${body.role ?: "USER"}"
+                    if (!body.fullName.isNullOrBlank()) {
+                        greeting.text = "Welcome, ${body.fullName}"
+                    }
                 } else {
-                    message.text = "Unauthorized"
+                    // Keep local info visible even if /me fails.
+                    username.text = "Username: $savedUsername"
+                    email.text = "Email: ${prefs.getString("email", "")}" 
+                    role.text = "Role: USER"
+                    message.text = "Unable to refresh profile"
                 }
             }
             override fun onFailure(call: Call<UserProfile>, t: Throwable) {
+                username.text = "Username: $savedUsername"
+                email.text = "Email: ${prefs.getString("email", "")}" 
+                role.text = "Role: USER"
                 message.text = "Network error"
             }
         })

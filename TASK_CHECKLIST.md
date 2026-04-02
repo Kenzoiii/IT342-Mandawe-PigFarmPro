@@ -26,4 +26,20 @@
 
 ## TODO
  - Create clean and proper UI for WEB and MOBILE
+
+## PHASE 2 UPDATE (Mobile Development)
+### Completed
+- Mobile registration implemented with required fields: Name, Email, Password
+- Mobile login implemented with email/password authentication
+- Input validation added on mobile screens
+- Backend API integration completed using Retrofit
+- Successful login redirection to dashboard implemented
+- Invalid login handling and message display implemented
+- Token persistence using SharedPreferences implemented
+- Android build verification passed (`assembleDebug`)
+
+### Pending Submission Tasks
+- Capture Phase 2 screenshots (6 required)
+- Create final commit with message: `IT342 Phase 2 - Mobile Development Completed`
+- Export and submit: `IT342_Phase2_Mobile_ProjectName_Lastname.pdf`
  

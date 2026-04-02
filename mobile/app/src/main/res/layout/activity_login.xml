@@ -1,40 +1,178 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="false"
+    android:background="@drawable/bg_auth_gradient">
 
-    <TextView
-        android:id="@+id/message"
-        android:textColor="#B00020"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="top"
+        android:paddingStart="@dimen/auth_screen_padding_h"
+        android:paddingEnd="@dimen/auth_screen_padding_h"
+        android:paddingTop="@dimen/auth_screen_padding_top"
+        android:paddingBottom="@dimen/auth_screen_padding_bottom">
 
-    <EditText
-        android:id="@+id/inputEmail"
-        android:hint="Email"
-        android:inputType="textEmailAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="20dp">
 
-    <EditText
-        android:id="@+id/inputPassword"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/imgAuthLogo"
+                android:layout_width="@dimen/auth_logo_size"
+                android:layout_height="@dimen/auth_logo_size"
+                android:src="@drawable/placeholder_app_logo"
+                android:contentDescription="App logo placeholder" />
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:text="Login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:layout_marginStart="14dp">
 
-    <Button
-        android:id="@+id/btnToRegister"
-        android:text="Go to Register"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Welcome back"
+                    android:textStyle="bold"
+                    android:textColor="@color/auth_title"
+                    android:textSize="30sp" />
 
-</LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sign in and check your farm status"
+                    android:textColor="@color/auth_body"
+                    android:textSize="@dimen/auth_subtitle_size"
+                    android:layout_marginTop="3dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/bg_auth_card"
+            android:padding="@dimen/auth_card_padding"
+            android:layout_marginTop="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Account Login"
+                android:textStyle="bold"
+                android:textColor="@color/auth_label"
+                android:textSize="21sp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/auth_error"
+                android:textSize="@dimen/auth_message_size"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textStyle="bold"
+                android:textColor="@color/auth_label"
+                android:textSize="@dimen/auth_label_size"
+                android:layout_marginBottom="6dp" />
+
+            <EditText
+                android:id="@+id/inputEmail"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/auth_field_height"
+                android:background="@drawable/bg_auth_input"
+                android:hint="john@pigfarm.com"
+                android:inputType="textEmailAddress"
+                android:importantForAutofill="yes"
+                android:autofillHints="emailAddress"
+                android:imeOptions="actionNext"
+                android:maxLines="1"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:singleLine="true"
+                android:textColor="@color/auth_label"
+                android:textColorHint="@color/auth_input_hint"
+                android:layout_marginBottom="14dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Password"
+                android:textStyle="bold"
+                android:textColor="@color/auth_label"
+                android:textSize="@dimen/auth_label_size"
+                android:layout_marginBottom="6dp" />
+
+            <EditText
+                android:id="@+id/inputPassword"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/auth_field_height"
+                android:background="@drawable/bg_auth_input"
+                android:hint="••••••••"
+                android:inputType="textPassword"
+                android:importantForAutofill="yes"
+                android:autofillHints="password"
+                android:imeOptions="actionDone"
+                android:maxLines="1"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:singleLine="true"
+                android:textColor="@color/auth_label"
+                android:textColorHint="@color/auth_input_hint"
+                android:layout_marginBottom="18dp" />
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/auth_button_height"
+                android:background="@drawable/bg_auth_primary_button"
+                android:text="Sign In"
+                android:textAllCaps="false"
+                android:textColor="@color/auth_white"
+                android:textSize="@dimen/auth_button_size"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnToRegister"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="@android:color/transparent"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:padding="0dp"
+                android:text="Don't have an account? Register"
+                android:textAllCaps="false"
+                android:textColor="@color/auth_link"
+                android:textSize="@dimen/auth_link_size"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tip: Use the same account for web and mobile."
+            android:textColor="@color/auth_body"
+            android:textSize="13sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp" />
+
+    </LinearLayout>
+
+</ScrollView>

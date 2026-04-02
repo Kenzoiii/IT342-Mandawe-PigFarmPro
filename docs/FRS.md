@@ -243,3 +243,39 @@ docs/screenshots/MOBILE/
 - Last Updated: March 7, 2026
 - Phase: 1 (User Registration and Authentication)
 - Status: Complete and Tested
+
+## Phase 2 Addendum - Mobile Development (March 28, 2026)
+
+### Mobile Functional Scope
+1. **Mobile Registration**
+  - Screen fields: Name, Email, Password
+  - Validates required fields, email format, and minimum password length
+  - Sends request to `POST /api/auth/register`
+  - Shows success or error message from backend
+
+2. **Mobile Login**
+  - Screen fields: Email, Password
+  - Validates required fields and email format
+  - Sends request to `POST /api/auth/login`
+  - Handles invalid credentials and network errors
+  - Redirects to dashboard on successful authentication
+
+3. **Mobile Post-Login Screen**
+  - Displays welcome state and profile info
+  - Uses `GET /api/user/me` for profile refresh
+  - Logout through `POST /api/auth/logout`
+
+### Mobile Technical Notes
+- Language: Kotlin
+- UI: XML Layouts
+- Networking: Retrofit + Gson
+- Auth persistence: SharedPreferences
+- Backend URL for emulator: `http://10.0.2.2:8081`
+
+### Phase 2 Required Screenshot Checklist
+- Registration screen
+- Successful registration
+- Login screen
+- Successful login
+- After login screen (dashboard)
+- Database record (Supabase)
