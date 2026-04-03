@@ -1,4 +1,4 @@
-package com.it342.g3.mobile.ui
+`package com.it342.g3.mobile.ui
 
 import android.content.Intent
 import android.os.Bundle

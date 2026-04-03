@@ -5,10 +5,13 @@ export default function Login({ onLogin }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const submit = async (e) => {
     e.preventDefault()
     setMessage('')
+    setLoading(true)
+
     try {
       const res = await login({ email, password })
       if (res.success && res.data && res.data.token) {
@@ -18,39 +21,63 @@ export default function Login({ onLogin }) {
       } else {
         setMessage(res.message || 'Login failed')
       }
-    } catch (err) {
+    } catch (_err) {
       setMessage('Network error')
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <form onSubmit={submit} style={{ maxWidth: '400px', margin: '50px auto' }}>
-      <h2>Login</h2>
-      <div style={{ marginBottom: '15px' }}>
-        <label>Email</label>
-        <input 
-          value={email} 
-          onChange={e => setEmail(e.target.value)} 
-          type="email" 
-          required 
-          style={{ width: '100%', padding: '8px' }}
-        />
-      </div>
-      <div style={{ marginBottom: '15px' }}>
-        <label>Password</label>
-        <input 
-          value={password} 
-          onChange={e => setPassword(e.target.value)} 
-          type="password" 
-          required 
-          style={{ width: '100%', padding: '8px' }}
-        />
-      </div>
-      <button type="submit" style={{ width: '100%', padding: '10px' }}>Login</button>
-      {message && <p style={{ color: message.includes('failed') ? 'crimson' : 'teal', marginTop: '15px' }}>{message}</p>}
-      <p style={{ textAlign: 'center', marginTop: '15px' }}>
-        Don't have an account? <a href="/register">Register here</a>
-      </p>
-    </form>
+    <section className="auth-page">
+      <header className="auth-header">
+        <div className="logo-chip" aria-hidden="true">
+          <span className="logo-glyph">🐷</span>
+        </div>
+        <h1>Welcome to PigFarmPro</h1>
+        <p>Sign in to manage your farm</p>
+      </header>
+
+      <form onSubmit={submit} className="auth-card">
+        <div className="field-wrap">
+          <label htmlFor="login-email">Email</label>
+          <input
+            id="login-email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            type="email"
+            placeholder="john@pigfarm.com"
+            required
+          />
+        </div>
+
+        <div className="field-wrap">
+          <label htmlFor="login-password">Password</label>
+          <input
+            id="login-password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            type="password"
+            placeholder="••••••••"
+            required
+          />
+        </div>
+
+        <button type="submit" className="primary-btn" disabled={loading}>
+          {loading ? 'Signing In...' : 'Sign In'}
+        </button>
+
+        {message && (
+          <p className={`form-message ${message.toLowerCase().includes('failed') ? 'error' : 'ok'}`}>
+            {message}
+          </p>
+        )}
+
+        <p className="switch-auth-text">
+          Don't have an account?{' '}
+          <a href="#register" className="switch-auth-link">Register here</a>
+        </p>
+      </form>
+    </section>
   )
 }

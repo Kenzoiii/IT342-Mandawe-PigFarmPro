@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface FeedingRepository extends JpaRepository<Feeding, Long> {
     List<Feeding> findByPenPenId(Long penId);
+    List<Feeding> findByPenPenIdIn(List<Long> penIds);
     List<Feeding> findByRecordedById(Long userId);
 }

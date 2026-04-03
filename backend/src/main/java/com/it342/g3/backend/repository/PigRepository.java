@@ -11,5 +11,6 @@ import java.util.Optional;
 public interface PigRepository extends JpaRepository<Pig, Long> {
     Optional<Pig> findByPigIdentifier(String pigIdentifier);
     List<Pig> findByPenPenId(Long penId);
+    List<Pig> findByPenPenIdIn(List<Long> penIds);
     boolean existsByPigIdentifier(String pigIdentifier);
 }
