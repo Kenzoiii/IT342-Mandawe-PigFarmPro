@@ -21,6 +21,14 @@
  - Verify emulator and device connectivity to backend (commit: 6edc7d3)
  - Capture and insert mobile and updated web screenshots into `docs/FRS.pdf` (commit: 6edc7d3)
 
+ - Web dashboard UI redesign with real data integration (commit: df734b4)
+ - Added pens tab UI with create and edit flows (commit: df734b4)
+ - Added pen details view with recently added pigs (commit: df734b4)
+ - Added pigs table view with search and filters (commit: df734b4)
+ - Implemented pig CRUD modals and wiring (commit: df734b4)
+ - Backend: dashboard, pen, and pig controllers with DTOs (commit: df734b4)
+ - Updated pig card sizing and layout (commit: df734b4)
+
 ## IN-PROGRESS
  - None
 
@@ -38,8 +46,5 @@
 - Token persistence using SharedPreferences implemented
 - Android build verification passed (`assembleDebug`)
 
-### Pending Submission Tasks
-- Capture Phase 2 screenshots (6 required)
-- Create final commit with message: `IT342 Phase 2 - Mobile Development Completed`
-- Export and submit: `IT342_Phase2_Mobile_ProjectName_Lastname.pdf`
+
  
