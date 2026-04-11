@@ -69,12 +69,14 @@ public class PenController {
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, "Capacity must be greater than zero"));
         }
 
+        String description = request.getDescription();
+
         Pen pen = new Pen();
         pen.setUser(user);
         pen.setPenName(request.getPenName().trim());
         pen.setPenIdentifier(resolveIdentifier(request.getPenIdentifier()));
         pen.setCapacity(request.getCapacity());
-        pen.setDescription(request.getDescription());
+        pen.setDescription(description != null && !description.trim().isEmpty() ? description.trim() : null);
 
         if (penRepository.existsByPenIdentifier(pen.getPenIdentifier())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ApiResponse<>(false, null, "Pen identifier already exists"));
@@ -125,6 +127,12 @@ public class PenController {
             return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, "Capacity must be greater than zero"));
         }
 
+        int occupied = pigRepository.findByPenPenId(penId).size();
+        if (request.getCapacity() < occupied) {
+            return ResponseEntity.badRequest()
+                    .body(new ApiResponse<>(false, null, "Capacity cannot be less than current occupied count (" + occupied + ")"));
+        }
+
         if (request.getPenIdentifier() != null && !request.getPenIdentifier().trim().isEmpty()) {
             String requestedIdentifier = request.getPenIdentifier().trim();
             if (!requestedIdentifier.equals(pen.getPenIdentifier()) && penRepository.existsByPenIdentifier(requestedIdentifier)) {
@@ -143,7 +151,7 @@ public class PenController {
 
         List<Pig> pigs = pigRepository.findByPenPenId(penId);
         int capacity = savedPen.getCapacity() != null ? savedPen.getCapacity() : 0;
-        int occupied = pigs.size();
+        occupied = pigs.size();
         int available = Math.max(capacity - occupied, 0);
         int utilization = capacity > 0 ? (int) Math.round((occupied * 100.0) / capacity) : 0;
 

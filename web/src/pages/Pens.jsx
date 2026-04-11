@@ -58,13 +58,26 @@ export default function Pens({ token, onLogout }) {
   const handleCreateSubmit = (event) => {
     event.preventDefault()
 
+    const trimmedName = form.name.trim()
+    const capacityValue = Number(form.capacity)
+
+    if (!trimmedName) {
+      setCreateMessage('Pen name is required.')
+      return
+    }
+
+    if (!Number.isFinite(capacityValue) || capacityValue <= 0) {
+      setCreateMessage('Capacity must be greater than zero.')
+      return
+    }
+
     setLoading(true)
     setError('')
     createPen(token, {
-      penIdentifier: form.identifier,
-      penName: form.name,
-      description: form.description,
-      capacity: Number(form.capacity)
+      penIdentifier: form.identifier.trim() || null,
+      penName: trimmedName,
+      description: form.description.trim() || null,
+      capacity: capacityValue
     })
       .then((res) => {
         if (!res.success) {
@@ -85,7 +98,7 @@ export default function Pens({ token, onLogout }) {
       .catch((err) => {
         setCreateMessage(err?.message === 'Failed to load dashboard'
           ? 'Saved, but failed to refresh the list.'
-          : 'Failed to save pen to the server. Check the API URL and backend availability.')
+          : (err?.message || 'Failed to save pen to the server. Check the API URL and backend availability.'))
       })
       .finally(() => setLoading(false))
   }

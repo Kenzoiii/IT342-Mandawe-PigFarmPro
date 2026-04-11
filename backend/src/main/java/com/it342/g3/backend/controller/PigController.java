@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -64,6 +65,20 @@ public class PigController {
         Pen pen = penRepository.findById(penId).orElse(null);
         if (pen == null || pen.getUser() == null || !pen.getUser().getId().equals(userId)) {
             return new ResponseEntity<>(new ApiResponse<>(false, null, "Pen not found"), HttpStatus.NOT_FOUND);
+        }
+
+        int penCapacity = pen.getCapacity() != null ? pen.getCapacity() : 0;
+        int occupied = pigRepository.findByPenPenId(penId).size();
+        if (penCapacity > 0 && occupied >= penCapacity) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, "Pen is already at full capacity"));
+        }
+
+        if (request.getCurrentWeight() != null && request.getCurrentWeight().compareTo(BigDecimal.ZERO) < 0) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, "Weight cannot be negative"));
+        }
+
+        if (request.getBirthdate() != null && request.getBirthdate().isAfter(LocalDate.now())) {
+            return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, "Birthdate cannot be in the future"));
         }
 
         String identifier = resolveIdentifier(request.getPigIdentifier());
@@ -125,10 +140,16 @@ public class PigController {
         }
 
         if (request.getBirthdate() != null) {
+            if (request.getBirthdate().isAfter(LocalDate.now())) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, "Birthdate cannot be in the future"));
+            }
             pig.setBirthdate(request.getBirthdate());
         }
 
         if (request.getCurrentWeight() != null) {
+            if (request.getCurrentWeight().compareTo(BigDecimal.ZERO) < 0) {
+                return ResponseEntity.badRequest().body(new ApiResponse<>(false, null, "Weight cannot be negative"));
+            }
             pig.setCurrentWeight(request.getCurrentWeight());
         }
 

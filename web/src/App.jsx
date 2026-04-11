@@ -27,6 +27,13 @@ function App() {
     }
   }, [])
 
+  useEffect(() => {
+    const protectedRoutes = ['dashboard', 'pens']
+    if (!token && protectedRoutes.includes(route)) {
+      window.location.hash = 'login'
+    }
+  }, [route, token])
+
   const onLogin = (t) => {
     setToken(t)
     localStorage.setItem('token', t)

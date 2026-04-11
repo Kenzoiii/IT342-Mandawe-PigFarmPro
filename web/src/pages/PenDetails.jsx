@@ -244,7 +244,7 @@ export default function PenDetails({ token, onLogout, penId }) {
                           </div>
                         </div>
                         <div className="pig-card-foot">
-                          <p className="pig-weight">{pig.weight ? `${pig.weight} ${pig.weightUnit || 'kg'}` : 'No weight recorded'}</p>
+                          <p className="pig-weight">{pig.weight !== null && pig.weight !== undefined ? `${pig.weight} ${pig.weightUnit || 'kg'}` : 'No weight recorded'}</p>
                           <span className={`pen-status ${statusClass(pig.status)}`}>
                             {pig.status || 'Active'}
                           </span>

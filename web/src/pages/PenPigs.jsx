@@ -166,11 +166,24 @@ export default function PenPigs({ token, onLogout, penId }) {
       return
     }
 
+    const birthdate = form.birthdate ? new Date(form.birthdate) : null
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    if (birthdate && !Number.isNaN(birthdate.getTime()) && birthdate > today) {
+      setModalError('Birthdate cannot be in the future.')
+      return
+    }
+
+    const weightValue = form.weight === '' ? null : Number(form.weight)
+    if (weightValue !== null && (!Number.isFinite(weightValue) || weightValue < 0)) {
+      setModalError('Weight cannot be negative.')
+      return
+    }
+
     setSaving(true)
     setModalError('')
     setActionMessage('')
 
-    const weightValue = form.weight === '' ? null : Number(form.weight)
     const payload = {
       pigIdentifier: form.identifier.trim() || null,
       breed: form.breed.trim() || null,
@@ -196,7 +209,7 @@ export default function PenPigs({ token, onLogout, penId }) {
         setActionMessage(modalMode === 'edit' ? 'Pig updated.' : 'Pig created.')
         return loadPenDetails()
       })
-      .catch(() => setModalError('Failed to save pig.'))
+        .catch((err) => setModalError(err?.message || 'Failed to save pig.'))
       .finally(() => setSaving(false))
   }
 
@@ -432,7 +445,7 @@ export default function PenPigs({ token, onLogout, penId }) {
                       <td>{pig.breed || '—'}</td>
                       <td>{pig.gender || '—'}</td>
                       <td>{formatBirthdate(pig.birthdate)}</td>
-                      <td>{pig.weight ? `${pig.weight} ${pig.weightUnit || 'kg'}` : '—'}</td>
+                      <td>{pig.weight !== null && pig.weight !== undefined ? `${pig.weight} ${pig.weightUnit || 'kg'}` : '—'}</td>
                       <td>
                         <span className={`pen-status ${normalizeStatus(pig.status) || 'active'}`}>
                           {pig.status || 'Active'}
