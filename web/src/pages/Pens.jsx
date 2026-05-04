@@ -40,7 +40,7 @@ export default function Pens({ token, onLogout }) {
   const menuItems = [
     { label: 'Dashboard', href: '#dashboard', icon: '▦', enabled: true },
     { label: 'Pens', href: '#pens', icon: '▣', active: true, enabled: true },
-    { label: 'Feeding', icon: 'ϟ', enabled: false },
+    { label: 'Feeding', href: '#feeding', icon: 'ϟ', enabled: true },
     { label: 'Health Records', icon: '♡', enabled: false },
     { label: 'Sales', icon: '$', enabled: false },
     { label: 'Mortality', icon: '△', enabled: false }

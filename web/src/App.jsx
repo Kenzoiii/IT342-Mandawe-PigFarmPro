@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard'
 import Pens from './pages/Pens'
 import PenDetails from './pages/PenDetails'
 import PenPigs from './pages/PenPigs'
+import Feeding from './pages/Feeding'
 
 function App() {
   const [route, setRoute] = useState('login')
@@ -56,11 +57,10 @@ function App() {
       {route === 'register' && <Register />}
       {route === 'login' && <Login onLogin={onLogin} />}
       {route === 'dashboard' && <Dashboard token={token} onLogout={onLogout} />}
-      {route === 'pens' && penPigsId && <PenPigs token={token} onLogout={onLogout} penId={penPigsId} />}
-      {route === 'pens' && penDetailsId && !penPigsId && (
-        <PenDetails token={token} onLogout={onLogout} penId={penDetailsId} />
-      )}
       {route === 'pens' && !penDetailsId && !penPigsId && <Pens token={token} onLogout={onLogout} />}
+      {route === 'pens' && penDetailsId && <PenDetails token={token} onLogout={onLogout} penId={penDetailsId} />}
+      {route === 'pens' && penPigsId && <PenPigs token={token} onLogout={onLogout} penId={penPigsId} />}
+      {route === 'feeding' && <Feeding token={token} onLogout={onLogout} />}
     </div>
   )
 }
