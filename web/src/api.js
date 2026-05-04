@@ -103,3 +103,45 @@ export async function deletePig(token, pigId) {
   })
   return res.json()
 }
+
+export async function getFeedingTransactions(token) {
+  const res = await fetch(`${BASE_URL}/user/feeding`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+  })
+  if (!res.ok) throw new Error('Failed to load feeding transactions')
+  return res.json()
+}
+
+export async function recordFeeding(token, transaction) {
+  const res = await fetch(`${BASE_URL}/user/feeding`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(transaction)
+  })
+  return res.json()
+}
+
+export async function updateFeeding(token, feedingId, transaction) {
+  const res = await fetch(`${BASE_URL}/user/feeding/${feedingId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(transaction)
+  })
+  return res.json()
+}
+
+export async function deleteFeeding(token, feedingId) {
+  const res = await fetch(`${BASE_URL}/user/feeding/${feedingId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${token}`
+    }
+  })
+  return res.json()
+}

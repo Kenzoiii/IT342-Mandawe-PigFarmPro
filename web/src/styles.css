@@ -697,6 +697,74 @@ body {
   overflow: hidden;
 }
 
+.feeding-table-card {
+  background: #fff;
+  border: 1px solid #dfe6ef;
+  border-radius: 16px;
+  overflow: visible;
+}
+
+.feeding-table-head {
+  padding: 1rem 1.1rem;
+  border-bottom: 1px solid #e6edf3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.feeding-table-head h4 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-family: 'Sora', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.feeding-table-meta {
+  font-size: 0.85rem;
+  color: #6b7b8f;
+}
+
+.feeding-actions-cell {
+  position: relative;
+  text-align: right;
+}
+
+.feeding-actions-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  background: #fff;
+  border: 1px solid #d5dde6;
+  border-radius: 10px;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+  padding: 0.35rem;
+  display: grid;
+  gap: 0.2rem;
+  min-width: 130px;
+  z-index: 4;
+}
+
+.feeding-actions-menu button {
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  border-radius: 8px;
+  font-weight: 600;
+  color: #17314f;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.feeding-actions-menu button:hover {
+  background: #f1f5f9;
+}
+
+.feeding-actions-menu button.danger {
+  color: #d92e45;
+}
+
 .pig-table {
   width: 100%;
   border-collapse: collapse;
@@ -895,6 +963,10 @@ body {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.9rem;
+}
+
+.dashboard-kpi-grid.feeding-kpi-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .dashboard-kpi-card {
@@ -1804,18 +1876,25 @@ body {
   gap: 0.45rem;
   color: #17314f;
   font-weight: 600;
+  min-width: 0;
 }
 
 .modal-form input,
 .modal-form textarea,
 .modal-form select {
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
   border: 1px solid #c7d3dd;
   border-radius: 12px;
   padding: 0.82rem 0.9rem;
   font: inherit;
   color: var(--text-strong);
   background: #fff;
+}
+
+.modal-form input[type='datetime-local'] {
+  min-width: 0;
 }
 
 .pig-modal-grid {
