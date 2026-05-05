@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import Login from './pages/Login'
-import Register from './pages/Register'
-import Dashboard from './pages/Dashboard'
-import Pens from './pages/Pens'
-import PenDetails from './pages/PenDetails'
-import PenPigs from './pages/PenPigs'
-import Feeding from './pages/Feeding'
+import Login from './features/authentication/pages/Login'
+import Register from './features/authentication/pages/Register'
+import Dashboard from './features/dashboard/pages/Dashboard'
+import Pens from './features/penManagement/pages/Pens'
+import PenDetails from './features/penManagement/pages/PenDetails'
+import PenPigs from './features/pigManagement/pages/PenPigs'
+import Feeding from './features/feedingManagement/pages/Feeding'
 
 function App() {
   const [route, setRoute] = useState('login')

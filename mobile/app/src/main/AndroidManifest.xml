@@ -6,7 +6,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".ui.LoginActivity"
+            android:name=".authentication.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -14,10 +14,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.RegisterActivity"
+            android:name=".authentication.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.DashboardActivity"
+            android:name=".dashboard.DashboardActivity"
             android:exported="false" />
     </application>
 </manifest>

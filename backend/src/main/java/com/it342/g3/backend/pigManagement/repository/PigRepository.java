@@ -1,0 +1,16 @@
+package com.it342.g3.backend.pigManagement.repository;
+
+import com.it342.g3.backend.pigManagement.model.Pig;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface PigRepository extends JpaRepository<Pig, Long> {
+    Optional<Pig> findByPigIdentifier(String pigIdentifier);
+    List<Pig> findByPenPenId(Long penId);
+    List<Pig> findByPenPenIdIn(List<Long> penIds);
+    boolean existsByPigIdentifier(String pigIdentifier);
+}
