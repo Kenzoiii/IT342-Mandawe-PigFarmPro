@@ -78,9 +78,9 @@ export default function Dashboard({ token, onLogout }) {
     { label: 'Dashboard', href: '#dashboard', icon: '▦', active: true, enabled: true },
     { label: 'Pens', href: '#pens', icon: '▣', enabled: true },
     { label: 'Feeding', href: '#feeding', icon: 'ϟ', enabled: true },
-    { label: 'Health Records', icon: '♡', enabled: false },
-    { label: 'Sales', icon: '$', enabled: false },
-    { label: 'Mortality', icon: '△', enabled: false }
+    { label: 'Health Records', href: '#health-records', icon: '♡', enabled: true },
+    { label: 'Sales', href: '#sales', icon: '$', enabled: true },
+    { label: 'Mortality', href: '#mortality', icon: '△', enabled: true }
   ]
 
   useEffect(() => {

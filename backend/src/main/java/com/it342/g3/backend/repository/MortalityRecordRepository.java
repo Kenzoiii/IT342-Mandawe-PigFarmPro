@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface MortalityRecordRepository extends JpaRepository<MortalityRecord, Long> {
     Optional<MortalityRecord> findByPigPigId(Long pigId);
+    List<MortalityRecord> findByPigPigIdIn(List<Long> pigIds);
     List<MortalityRecord> findByRecordedById(Long userId);
 }

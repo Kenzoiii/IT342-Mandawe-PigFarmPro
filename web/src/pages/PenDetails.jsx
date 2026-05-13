@@ -4,10 +4,10 @@ import { getPenDetails, updatePen } from '../api'
 const MENU_ITEMS = [
   { label: 'Dashboard', href: '#dashboard', icon: '▦', enabled: true },
   { label: 'Pens', href: '#pens', icon: '▣', active: true, enabled: true },
-  { label: 'Feeding', icon: 'ϟ', enabled: false },
-  { label: 'Health Records', icon: '♡', enabled: false },
-  { label: 'Sales', icon: '$', enabled: false },
-  { label: 'Mortality', icon: '△', enabled: false }
+  { label: 'Feeding', href: '#feeding', icon: 'ϟ', enabled: true },
+  { label: 'Health Records', href: '#health-records', icon: '♡', enabled: true },
+  { label: 'Sales', href: '#sales', icon: '$', enabled: true },
+  { label: 'Mortality', href: '#mortality', icon: '△', enabled: true }
 ]
 
 export default function PenDetails({ token, onLogout, penId }) {

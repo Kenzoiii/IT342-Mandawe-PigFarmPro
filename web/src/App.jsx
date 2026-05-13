@@ -6,6 +6,9 @@ import Pens from './pages/Pens'
 import PenDetails from './pages/PenDetails'
 import PenPigs from './pages/PenPigs'
 import Feeding from './pages/Feeding'
+import HealthRecords from './pages/HealthRecords'
+import Sales from './pages/Sales'
+import Mortality from './pages/Mortality'
 
 function App() {
   const [route, setRoute] = useState('login')
@@ -29,7 +32,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const protectedRoutes = ['dashboard', 'pens']
+    const protectedRoutes = ['dashboard', 'pens', 'feeding', 'health-records', 'sales', 'mortality']
     if (!token && protectedRoutes.includes(route)) {
       window.location.hash = 'login'
     }
@@ -61,6 +64,9 @@ function App() {
       {route === 'pens' && penDetailsId && <PenDetails token={token} onLogout={onLogout} penId={penDetailsId} />}
       {route === 'pens' && penPigsId && <PenPigs token={token} onLogout={onLogout} penId={penPigsId} />}
       {route === 'feeding' && <Feeding token={token} onLogout={onLogout} />}
+      {route === 'health-records' && <HealthRecords token={token} onLogout={onLogout} />}
+      {route === 'sales' && <Sales token={token} onLogout={onLogout} />}
+      {route === 'mortality' && <Mortality token={token} onLogout={onLogout} />}
     </div>
   )
 }

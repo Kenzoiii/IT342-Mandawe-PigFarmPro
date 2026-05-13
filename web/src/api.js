@@ -124,6 +124,14 @@ export async function deletePig(token, pigId) {
   })
 }
 
+export async function getPigs(token) {
+  const res = await requestJson('/user/pigs', {
+    headers: { 'Authorization': `Bearer ${token}` }
+  })
+  if (!res.success) throw new Error(res.message || 'Failed to load pigs')
+  return res
+}
+
 export async function getFeedingTransactions(token) {
   const res = await fetch(`${BASE_URL}/user/feeding`, {
     headers: { 'Authorization': `Bearer ${token}` }
@@ -164,4 +172,72 @@ export async function deleteFeeding(token, feedingId) {
     }
   })
   return res.json()
+}
+
+export async function getHealthRecords(token) {
+  const res = await requestJson('/user/health-records', {
+    headers: { 'Authorization': `Bearer ${token}` }
+  })
+  if (!res.success) throw new Error(res.message || 'Failed to load health records')
+  return res
+}
+
+export async function createHealthRecord(token, record) {
+  return requestJson('/user/health-records', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(record)
+  })
+}
+
+export async function getSales(token) {
+  const res = await requestJson('/user/sales', {
+    headers: { 'Authorization': `Bearer ${token}` }
+  })
+  if (!res.success) throw new Error(res.message || 'Failed to load sales')
+  return res
+}
+
+export async function createSale(token, sale) {
+  return requestJson('/user/sales', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(sale)
+  })
+}
+
+export async function updateSale(token, saleId, sale) {
+  return requestJson(`/user/sales/${saleId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(sale)
+  })
+}
+
+export async function getMortalityRecords(token) {
+  const res = await requestJson('/user/mortality', {
+    headers: { 'Authorization': `Bearer ${token}` }
+  })
+  if (!res.success) throw new Error(res.message || 'Failed to load mortality records')
+  return res
+}
+
+export async function createMortalityRecord(token, record) {
+  return requestJson('/user/mortality', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(record)
+  })
 }

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -198,6 +200,29 @@ public class PigController {
         return ResponseEntity.ok(new ApiResponse<>(true, Map.of("id", pigId), "Pig deleted"));
     }
 
+    @GetMapping("/pigs")
+    public ResponseEntity<?> getPigs(@RequestHeader(value = "Authorization", required = false) String authorization) {
+        Long userId = validateAndResolveUserId(authorization);
+        if (userId == null) {
+            return new ResponseEntity<>(new ApiResponse<>(false, null, "Unauthorized"), HttpStatus.UNAUTHORIZED);
+        }
+
+        User user = authService.getProfile(userId);
+        if (user == null) {
+            return new ResponseEntity<>(new ApiResponse<>(false, null, "User not found"), HttpStatus.NOT_FOUND);
+        }
+
+        List<Pen> pens = penRepository.findByUserId(userId);
+        List<Long> penIds = pens.stream().map(Pen::getPenId).toList();
+        List<Pig> pigs = penIds.isEmpty() ? List.of() : pigRepository.findByPenPenIdIn(penIds);
+
+        List<Map<String, Object>> payload = pigs.stream()
+                .map(this::mapPigSummary)
+                .toList();
+
+        return ResponseEntity.ok(new ApiResponse<>(true, payload, "Pigs loaded"));
+    }
+
     private Map<String, Object> mapPig(Pig pig) {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("id", pig.getPigId());
@@ -209,6 +234,16 @@ public class PigController {
         payload.put("gender", pig.getGender());
         payload.put("status", pig.getStatus());
         payload.put("notes", pig.getNotes());
+        return payload;
+    }
+
+    private Map<String, Object> mapPigSummary(Pig pig) {
+        Map<String, Object> payload = mapPig(pig);
+        Pen pen = pig.getPen();
+        payload.put("penId", pen != null ? pen.getPenId() : null);
+        payload.put("penName", pen != null ? pen.getPenName() : null);
+        payload.put("penIdentifier", pen != null ? pen.getPenIdentifier() : null);
+        payload.put("addedAt", pig.getAddedAt());
         return payload;
     }
 
