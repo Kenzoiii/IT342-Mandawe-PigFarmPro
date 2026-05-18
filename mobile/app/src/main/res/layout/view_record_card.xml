@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/card_padding"
+    android:background="@drawable/bg_card">
+
+    <TextView
+        android:id="@+id/recordTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/recordSubtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Subtitle"
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/recordMeta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Meta"
+        android:textColor="@color/text_muted"
+        android:textSize="12sp"
+        android:layout_marginTop="4dp" />
+
+    <TextView
+        android:id="@+id/recordStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status"
+        android:textColor="@color/chip_text"
+        android:textSize="12sp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:background="@drawable/bg_chip"
+        android:layout_marginTop="8dp" />
+
+    <LinearLayout
+        android:id="@+id/recordActions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp">
+
+        <Button
+            android:id="@+id/btnPrimary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:text="Primary"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_auth_primary_button"
+            android:textColor="@color/auth_white"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnSecondary"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/button_height"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:text="Secondary"
+            android:textAllCaps="false"
+            android:background="@drawable/bg_outline_button"
+            android:textColor="@color/text_primary"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

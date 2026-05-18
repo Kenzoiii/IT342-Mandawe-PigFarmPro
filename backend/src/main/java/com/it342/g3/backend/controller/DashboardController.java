@@ -328,28 +328,7 @@ public class DashboardController {
     }
 
     private Long validateAndResolveUserId(String authorization) {
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            return null;
-        }
-
-        String token = authorization.substring("Bearer ".length());
-        if (!tokenProvider.validateToken(token)) {
-            return null;
-        }
-
-        return parseUserIdFromToken(token);
-    }
-
-    private Long parseUserIdFromToken(String token) {
-        try {
-            String prefix = "token-for-";
-            if (!token.startsWith(prefix)) {
-                return null;
-            }
-            return Long.parseLong(token.substring(prefix.length()));
-        } catch (Exception ignored) {
-            return null;
-        }
+        return tokenProvider.resolveUserIdFromAuthorization(authorization);
     }
 
     private record ActivityEvent(LocalDateTime occurredAt, String title, String tone) {}

@@ -15,4 +15,12 @@
     <dimen name="auth_button_height">56dp</dimen>
     <dimen name="auth_button_size">19sp</dimen>
     <dimen name="auth_link_size">17sp</dimen>
+
+    <dimen name="screen_padding">28dp</dimen>
+    <dimen name="card_radius">20dp</dimen>
+    <dimen name="card_padding">20dp</dimen>
+    <dimen name="section_gap">18dp</dimen>
+    <dimen name="list_gap">14dp</dimen>
+    <dimen name="chip_radius">12dp</dimen>
+    <dimen name="button_height">54dp</dimen>
 </resources>

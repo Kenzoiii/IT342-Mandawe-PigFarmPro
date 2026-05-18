@@ -2232,6 +2232,86 @@ body {
   color: #2b3f57;
 }
 
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.settings-card {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.settings-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.settings-card-head h3 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-family: 'Sora', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.settings-card-head p {
+  margin: 0.3rem 0 0;
+  color: #5f7087;
+}
+
+.settings-tag {
+  background: #eef2f7;
+  color: #52657a;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.settings-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.settings-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.settings-row label {
+  display: grid;
+  gap: 0.45rem;
+  color: #17314f;
+  font-weight: 600;
+  min-width: 0;
+}
+
+.settings-row input {
+  width: 100%;
+  border: 1px solid #c7d3dd;
+  border-radius: 12px;
+  padding: 0.82rem 0.9rem;
+  font: inherit;
+  color: var(--text-strong);
+  background: #fff;
+}
+
+.settings-row input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(8, 155, 105, 0.14);
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .pens-kpi-grid {
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
@@ -2737,6 +2817,10 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
   .pen-stats-grid,
   .pig-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2767,7 +2851,8 @@ body {
   .sales-modal-grid,
   .sales-detail-grid,
   .mortality-modal-grid,
-  .mortality-detail-grid {
+  .mortality-detail-grid,
+  .settings-row {
     grid-template-columns: 1fr;
   }
 

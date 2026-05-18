@@ -6,6 +6,8 @@ import com.it342.g3.backend.dto.LoginRequest;
 import com.it342.g3.backend.dto.AuthResponse;
 import com.it342.g3.backend.dto.ApiResponse;
 import com.it342.g3.backend.service.AuthService;
+import com.it342.g3.backend.service.TokenBlacklist;
+import com.it342.g3.backend.service.TokenProvider;
 import com.it342.g3.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,12 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
+    private TokenBlacklist tokenBlacklist;
 
     /**
      * Register a new user
@@ -194,9 +202,21 @@ public class AuthController {
      * POST /api/auth/logout
      */
     @PostMapping("/logout")
-    public ResponseEntity<ApiResponse<Object>> logoutUser() {
-        return ResponseEntity.ok(
-            new ApiResponse<>(true, null, "Logout successful")
-        );
+    public ResponseEntity<ApiResponse<Object>> logoutUser(
+            @RequestHeader(value = "Authorization", required = false) String authorization
+    ) {
+        if (authorization == null || !authorization.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse<>(false, null, "Unauthorized"));
+        }
+
+        String token = authorization.substring("Bearer ".length()).trim();
+        if (!tokenProvider.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse<>(false, null, "Invalid token"));
+        }
+
+        tokenBlacklist.blacklist(token);
+        return ResponseEntity.ok(new ApiResponse<>(true, null, "Logout successful"));
     }
 }

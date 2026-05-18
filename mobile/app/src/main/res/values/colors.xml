@@ -25,4 +25,22 @@
     <color name="banner_bg">#F4FAFB</color>
     <color name="banner_stroke">#9EB6BF</color>
     <color name="banner_mark">#CCDFE5</color>
+
+    <color name="brand_primary">#069B79</color>
+    <color name="brand_primary_dark">#03765D</color>
+    <color name="brand_secondary">#0B2146</color>
+
+    <color name="text_primary">#0B2146</color>
+    <color name="text_secondary">#35576C</color>
+    <color name="text_muted">#6E8795</color>
+
+    <color name="bg_page">#F4FAFB</color>
+    <color name="card_bg">#FFFFFF</color>
+    <color name="card_stroke">#D8E2E6</color>
+    <color name="chip_bg">#E6F5F0</color>
+    <color name="chip_text">#0A6C57</color>
+
+    <color name="status_success">#069B79</color>
+    <color name="status_warning">#D59B2D</color>
+    <color name="status_danger">#C84C4C</color>
 </resources>

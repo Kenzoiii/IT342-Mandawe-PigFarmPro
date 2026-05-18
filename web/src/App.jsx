@@ -9,6 +9,8 @@ import Feeding from './pages/Feeding'
 import HealthRecords from './pages/HealthRecords'
 import Sales from './pages/Sales'
 import Mortality from './pages/Mortality'
+import Settings from './pages/Settings'
+import { logout } from './api'
 
 function App() {
   const [route, setRoute] = useState('login')
@@ -32,7 +34,7 @@ function App() {
   }, [])
 
   useEffect(() => {
-    const protectedRoutes = ['dashboard', 'pens', 'feeding', 'health-records', 'sales', 'mortality']
+    const protectedRoutes = ['dashboard', 'pens', 'feeding', 'health-records', 'sales', 'mortality', 'settings']
     if (!token && protectedRoutes.includes(route)) {
       window.location.hash = 'login'
     }
@@ -44,7 +46,15 @@ function App() {
     window.location.hash = 'dashboard'
   }
 
-  const onLogout = () => {
+  const onLogout = async () => {
+    const currentToken = token
+    if (currentToken) {
+      try {
+        await logout(currentToken)
+      } catch (_err) {
+        // Ignore logout errors and still clear local session.
+      }
+    }
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     setToken('')
@@ -67,6 +77,7 @@ function App() {
       {route === 'health-records' && <HealthRecords token={token} onLogout={onLogout} />}
       {route === 'sales' && <Sales token={token} onLogout={onLogout} />}
       {route === 'mortality' && <Mortality token={token} onLogout={onLogout} />}
+      {route === 'settings' && <Settings token={token} onLogout={onLogout} />}
     </div>
   )
 }

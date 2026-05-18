@@ -11,6 +11,7 @@ import com.it342.g3.mobile.api.ApiClient
 import com.it342.g3.mobile.api.LoginRequest
 import com.it342.g3.mobile.api.ApiResponse
 import com.it342.g3.mobile.api.AuthData
+import com.it342.g3.mobile.auth.AuthStore
 import com.it342.g3.mobile.R
 import retrofit2.*
 
@@ -45,13 +46,7 @@ class LoginActivity : AppCompatActivity() {
                     val body = response.body()
                     val token = body?.data?.token
                     if (response.isSuccessful && body?.success == true && !token.isNullOrBlank()) {
-                        val prefs = getSharedPreferences("auth", MODE_PRIVATE)
-                        prefs.edit()
-                            .putString("token", token)
-                            .putString("username", body.data.username ?: "")
-                            .putString("email", body.data.email ?: "")
-                            .putString("fullName", body.data.fullName ?: "")
-                            .apply()
+                        AuthStore.saveAuth(this@LoginActivity, body.data)
 
                         startActivity(Intent(this@LoginActivity, DashboardActivity::class.java))
                         finish()

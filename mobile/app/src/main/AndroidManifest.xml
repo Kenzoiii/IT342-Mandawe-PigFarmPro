@@ -19,5 +19,8 @@
         <activity
             android:name=".ui.DashboardActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.PenDetailActivity"
+            android:exported="false" />
     </application>
 </manifest>

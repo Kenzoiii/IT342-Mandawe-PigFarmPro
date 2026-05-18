@@ -214,23 +214,6 @@ public class MortalityRecordController {
     }
 
     private Long validateAndResolveUserId(String authorization) {
-        if (authorization == null || !authorization.startsWith("Bearer ")) {
-            return null;
-        }
-
-        String token = authorization.substring("Bearer ".length());
-        if (!tokenProvider.validateToken(token)) {
-            return null;
-        }
-
-        try {
-            String prefix = "token-for-";
-            if (!token.startsWith(prefix)) {
-                return null;
-            }
-            return Long.parseLong(token.substring(prefix.length()));
-        } catch (Exception ignored) {
-            return null;
-        }
+        return tokenProvider.resolveUserIdFromAuthorization(authorization);
     }
 }

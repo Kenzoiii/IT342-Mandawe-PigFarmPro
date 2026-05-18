@@ -47,10 +47,20 @@ export async function login({ email, password }) {
   })
 }
 
+export async function logout(token) {
+  return requestJson('/auth/logout', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` }
+  })
+}
+
 export async function getMe(token) {
   const res = await requestJson('/user/me', {
     headers: { 'Authorization': `Bearer ${token}` }
   })
+  if (res && typeof res === 'object' && res.success === undefined && res.id !== undefined) {
+    return { success: true, data: res }
+  }
   if (!res.success) throw new Error(res.message || 'Unauthorized')
   return res
 }
@@ -220,6 +230,28 @@ export async function updateSale(token, saleId, sale) {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(sale)
+  })
+}
+
+export async function updateProfile(token, profile) {
+  return requestJson('/user/me', {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(profile)
+  })
+}
+
+export async function updatePassword(token, payload) {
+  return requestJson('/user/password', {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(payload)
   })
 }
 

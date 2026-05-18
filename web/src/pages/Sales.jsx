@@ -312,7 +312,7 @@ export default function Sales({ token, onLogout }) {
         </nav>
 
         <div className="sidebar-footer">
-          <button type="button" className="menu-item"><span>⚙</span>Settings</button>
+          <a href="#settings" className="menu-item"><span>⚙</span>Settings</a>
           <button type="button" className="menu-item" onClick={onLogout}><span>↪</span>Logout</button>
         </div>
       </aside>

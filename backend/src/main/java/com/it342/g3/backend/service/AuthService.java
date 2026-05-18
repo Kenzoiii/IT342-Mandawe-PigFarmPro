@@ -41,13 +41,15 @@ public class AuthService {
         String token = tokenProvider.generateToken(savedUser);
 
         // Return auth response
-        return new AuthResponse(
+        AuthResponse response = new AuthResponse(
             savedUser.getId(),
             savedUser.getUsername(),
             savedUser.getEmail(),
             savedUser.getFullName(),
             token
         );
+        response.setExpiresIn(tokenProvider.getExpirationSeconds());
+        return response;
     }
 
     /**
@@ -58,13 +60,15 @@ public class AuthService {
 
         if (user != null && passwordEncoder.matches(rawPassword, user.getPasswordHash())) {
             String token = tokenProvider.generateToken(user);
-            return new AuthResponse(
+            AuthResponse response = new AuthResponse(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getFullName(),
                 token
             );
+            response.setExpiresIn(tokenProvider.getExpirationSeconds());
+            return response;
         }
         return null;
     }
